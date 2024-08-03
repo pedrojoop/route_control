@@ -21,6 +21,7 @@ Este projeto tem como objetivo criar um sistema automatizado de controle de rota
 ### Aplicação Frontend
 - Interface para gerenciar clientes, rotas, motoristas, produtos e notas.
 - Visualiza dados e status das entregas.
+- Cadastra notas, clientes, rotas, motoristas e produtos
 
 ## Fluxo de Trabalho
 
