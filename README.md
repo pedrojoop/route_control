@@ -1,77 +1,99 @@
-# Documentação do Projeto: Bot de Controle de Rotas
+# Documentação do Backend
 
 ## Visão Geral
 
-Este projeto tem como objetivo criar um sistema automatizado de controle de rotas que integra um bot de WhatsApp, um banco de dados PostgreSQL, um servidor backend e uma aplicação frontend. O sistema gerencia dados de clientes, rotas, motoristas, produtos e informações da empresa, permitindo a comunicação automatizada entre motoristas, clientes e a empresa.
+Este backend é construído usando Flask, Flask-SQLAlchemy e Flask-CORS, e se conecta a um banco de dados PostgreSQL. Ele fornece uma API RESTful para gerenciar clientes, rotas, motoristas, produtos, informações da empresa e check-ins.
 
-## Componentes do Sistema
+## Estrutura do Projeto
 
-### Banco de Dados PostgreSQL
-- Armazena dados de clientes, rotas, motoristas, produtos e informações da empresa.
+```plaintext
+meu_projeto/
+├── app.py
+├── models.py
+├── routes.py
+├── config.py
+└── __init__.py
+```
 
-### Servidor Backend (Python)
-- Integra o banco de dados PostgreSQL.
-- Fornece uma API para a aplicação frontend.
-- Integra o bot de WhatsApp para comunicação automatizada.
+# Dependências
 
-### Bot de WhatsApp (Python)
-- Interage com motoristas para check-ins de rotas.
-- Envia atualizações automatizadas para clientes e a empresa sobre o status das entregas.
+As seguintes bibliotecas são necessárias:
 
-### Aplicação Frontend
-- Interface para gerenciar clientes, rotas, motoristas, produtos e informações da empresa.
-- Visualiza dados e status das entregas.
+```
+├── Flask
+├── Flask-SQLAlchemy
+├── Flask-CORS
+└── psycopg2-binary
+```
 
-## Fluxo de Trabalho
+# Configuração do Ambiente
 
-### Inicialização e Configuração
-1. Configurar o banco de dados PostgreSQL.
-2. Configurar o servidor backend.
-3. Configurar e inicializar o bot de WhatsApp.
+Instalar as dependências:
+```
+pip install flask flask_sqlalchemy flask_cors psycopg2-binary
+```
 
-### Entrada de Dados
-- Inserir dados iniciais de clientes, rotas, motoristas, produtos e informações da empresa no banco de dados através do frontend.
+# Configurar o Banco de Dados PostgreSQL:
 
-### Check-in do Motorista
-- O motorista faz o check-in em determinados pontos da rota usando o bot de WhatsApp.
-- O bot registra o local, horário e data do check-in no banco de dados.
+Certifique-se de que o PostgreSQL está instalado e configurado no seu sistema. Crie um banco de dados para o seu projeto:
 
-### Notificações Automatizadas
-- O bot envia notificações automáticas ao cliente e à empresa com informações sobre o produto, local, horário e data do último check-in, além da estimativa de chegada.
+```
+CREATE DATABASE my_bank;
+```
 
-## Detalhes de Implementação
+Configuração dos Arquivos
 
-### 1. Banco de Dados PostgreSQL
+config.py:
+- Define a configuração do banco de dados.
 
-**Tabelas**:
-- `clientes`
-- `rotas`
-- `motoristas`
-- `produtos`
-- `empresa`
-- `checkins`
+models.py:
+- Define os modelos de dados usando SQLAlchemy.
 
-### 2. Servidor Backend (Python)
+routes.py:
+- Define as rotas da API para interagir com os dados.
 
-**Requisitos**:
-- Flask
-- SQLAlchemy (para integração com PostgreSQL)
-- psycopg2 (driver PostgreSQL)
+app.py:
+- Arquivo principal do aplicativo Flask.
 
-### 3. Bot de WhatsApp (Python)
+__init__.py:
+- Arquivo de inicialização do pacote. Pode ser deixado vazio ou usado para inicializações adicionais se necessário.
 
-**Requisitos**:
-- selenium
-- openai
-- requests
+# Criação do Banco de Dados
 
-### 4. Aplicação Frontend
+Para criar as tabelas no banco de dados, execute o seguinte comando:
 
-**Tecnologias Sugeridas**:
-- React.js
-- Axios (para chamadas de API)
+```
+python app.py
+```
 
-## Conclusão
+# Testar a API
 
-Este projeto abrange a criação de um sistema automatizado de controle de rotas utilizando um bot de WhatsApp, um banco de dados PostgreSQL, um servidor backend em Python e uma aplicação frontend. A documentação fornece uma visão geral e exemplos de implementação para cada componente do sistema.
+Para testar a API, execute o servidor Flask:
 
+```
+python app.py
+```
+
+- A API estará disponível em http://localhost:5000/api
+
+# Endpoints da API:
+
+GET /api/clientes:
+- Retorna uma lista de todos os clientes.
+
+GET /api/rotas:
+- Retorna uma lista de todas as rotas.
+
+GET /api/motoristas:
+- Retorna uma lista de todos os motoristas.
+
+GET /api/produtos:
+- Retorna uma lista de todos os produtos.
+
+GET /api/empresa:
+- Retorna uma lista de todas as empresas.
+
+POST /api/checkin:
+- Cria um novo check-in.
+
+Esta documentação fornece uma visão geral do backend, incluindo a estrutura do projeto, as dependências necessárias, a configuração do ambiente, a criação do banco de dados, a inicialização do servidor Flask e os endpoints da API disponíveis.
