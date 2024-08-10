@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from config import Config
 from models import db, Rota, Checkin, Empresa, Cliente, Motorista, Produto
 from routes import bp
+from admin import admin_bp
+from auth import auth_bp
 from flask_cors import CORS
 from flask_migrate import Migrate
 from geopy.geocoders import Nominatim
@@ -18,6 +20,8 @@ with app.app_context():
     db.create_all()
 
 app.register_blueprint(bp, url_prefix='/api')
+app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(admin_bp, url_prefix='/admin')
 
 # Configurações da API
 mapbox_api_key = 'sk.eyJ1IjoicGVkcm9qb29wIiwiYSI6ImNsemlkZTdjYjBlcjUyaXByMzBuOWVjeDcifQ.NXMbPaK1-krq17xrlu3gpw'
@@ -76,7 +80,7 @@ def calcular_tempo_restante(local_atual, local_entrega):
 
 def formatar_tempo(timedelta_obj):
     total_seconds = int(timedelta_obj.total_seconds())
-    days, remainder = divmod(total_seconds, 86400)
+    days, remainder = divmod(total_seconds, 86400)  # 86400 segundos em um dia
     hours, remainder = divmod(remainder, 3600)
     minutes, seconds = divmod(remainder, 60)
     if days > 0:
@@ -84,7 +88,7 @@ def formatar_tempo(timedelta_obj):
     else:
         return f"{hours} horas, {minutes} minutos, {seconds} segundos"
 
-# Função para criar uma nova rota
+# Função para criar uma nova rota associada à empresa
 def criar_rota(descricao, local_saida, local_entrega, empresa_id):
     with app.app_context():
         rota = Rota(
@@ -100,7 +104,7 @@ def criar_rota(descricao, local_saida, local_entrega, empresa_id):
         db.session.commit()
         return rota
 
-# Função para criar um novo check-in
+# Função para criar um novo check-in associado à empresa
 def criar_checkin(motorista_id, rota_id, produto_id, local):
     with app.app_context():
         checkin = Checkin(

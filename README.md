@@ -1,99 +1,93 @@
-# Documentação do Backend
+# Controle de Rotas - Backend
 
-## Visão Geral
+Este projeto é um sistema de controle de rotas que inclui gerenciamento de empresas, autenticação, criação e monitoramento de rotas, check-ins de motoristas e integração com WhatsApp para notificações automáticas. O backend foi desenvolvido em Python utilizando Flask, SQLAlchemy, e PostgreSQL.
 
-Este backend é construído usando Flask, Flask-SQLAlchemy e Flask-CORS, e se conecta a um banco de dados PostgreSQL. Ele fornece uma API RESTful para gerenciar clientes, rotas, motoristas, produtos, informações da empresa e check-ins.
+## Funcionalidades
 
-## Estrutura do Projeto
+- **Autenticação de Empresas**: Gerenciamento de login e senha para empresas, com controle de acesso.
+- **Gerenciamento de Rotas**: Criação e monitoramento de rotas, incluindo cálculo de tempo estimado e distância.
+- **Check-ins de Motoristas**: Registro de check-ins dos motoristas, calculando o tempo restante de entrega.
+- **Integração com Mapbox**: Cálculo de rotas e geocodificação utilizando a API do Mapbox.
 
-```plaintext
-meu_projeto/
-├── app.py
-├── models.py
-├── routes.py
-├── config.py
-└── __init__.py
-```
+## Tecnologias Utilizadas
 
-# Dependências
+- **Python**: Linguagem de programação principal.
+- **Flask**: Framework web para Python.
+- **SQLAlchemy**: ORM para gerenciamento de banco de dados.
+- **PostgreSQL**: Banco de dados relacional.
+- **Mapbox**: API para geocodificação e cálculo de rotas.
+- **Werkzeug**: Biblioteca para hashing de senhas.
 
-As seguintes bibliotecas são necessárias:
+## Configuração do Projeto
 
-```
-├── Flask
-├── Flask-SQLAlchemy
-├── Flask-CORS
-└── psycopg2-binary
-```
+### Pré-requisitos
 
-# Configuração do Ambiente
+- Python 3.7+
+- PostgreSQL
+- Virtualenv (recomendado)
 
-Instalar as dependências:
-```
-pip install flask flask_sqlalchemy flask_cors psycopg2-binary
-```
+### Instalação
 
-# Configurar o Banco de Dados PostgreSQL:
+1. **Clone o repositório:**
 
-Certifique-se de que o PostgreSQL está instalado e configurado no seu sistema. Crie um banco de dados para o seu projeto:
+   ```
+   git clone https://github.com/seu-usuario/route_control.git
+   cd route_control
+   ```
 
-```
-CREATE DATABASE my_bank;
-```
+2. **Crie e ative um ambiente virtual:**
 
-Configuração dos Arquivos
+  ```
+    python -m venv venv
+    source `venv\Scripts\activate`
+  ```
 
-config.py:
-- Define a configuração do banco de dados.
+# Configure as variáveis de ambiente:
 
-models.py:
-- Define os modelos de dados usando SQLAlchemy.
+1. ***Crie um arquivo .env na raiz do projeto e adicione as configurações necessárias, como a string de conexão com o banco de dados PostgreSQL e a chave da API do Mapbox.**
 
-routes.py:
-- Define as rotas da API para interagir com os dados.
+  ```
+    DATABASE_URL=postgresql://usuario:senha@localhost/nome_do_banco
+    MAPBOX_API_KEY=sua_chave_da_api_mapbox
+  ```
 
-app.py:
-- Arquivo principal do aplicativo Flask.
+2. **Inicialize o banco de dados:**
 
-__init__.py:
-- Arquivo de inicialização do pacote. Pode ser deixado vazio ou usado para inicializações adicionais se necessário.
+3. **Se estiver usando scripts SQL manuais:**
 
-# Criação do Banco de Dados
+  ```
+    psql -U seu_usuario -d seu_banco_de_dados -f migracoes/001_add_auth_fields.sql
+  ```
 
-Para criar as tabelas no banco de dados, execute o seguinte comando:
+4. **Execute a aplicação:**
 
-```
-python app.py
-```
+  ```
+    python app.py
+  ```
 
-# Testar a API
+# Estrutura do Projeto
 
-Para testar a API, execute o servidor Flask:
+- app.py: Arquivo principal da aplicação Flask.
+- models.py: Definições dos modelos de dados usando SQLAlchemy.
+- auth.py: Rotas para autenticação de empresas.
+- admin.py: Rotas para criação e gerenciamento de empresas.
+- routes.py: Rotas relacionadas ao controle de rotas e check-ins.
+- config.py: Configurações da aplicação Flask.
 
-```
-python app.py
-```
+# Rotas da API:
 
-- A API estará disponível em http://localhost:5000/api
+1. **Autenticação:**
 
-# Endpoints da API:
+- POST /auth/login: Autentica uma empresa com login e senha.
 
-GET /api/clientes:
-- Retorna uma lista de todos os clientes.
+2. **Gerenciamento de Empresas:**
 
-GET /api/rotas:
-- Retorna uma lista de todas as rotas.
+- POST /admin/create_empresa: Cria uma nova empresa com login e senha.
 
-GET /api/motoristas:
-- Retorna uma lista de todos os motoristas.
+3. **Gerenciamento de Rotas:**
 
-GET /api/produtos:
-- Retorna uma lista de todos os produtos.
+- POST /api/criar_rota: Cria uma nova rota para uma empresa.
 
-GET /api/empresa:
-- Retorna uma lista de todas as empresas.
+4. **Gerenciamento de Check-ins:**
 
-POST /api/checkin:
-- Cria um novo check-in.
-
-Esta documentação fornece uma visão geral do backend, incluindo a estrutura do projeto, as dependências necessárias, a configuração do ambiente, a criação do banco de dados, a inicialização do servidor Flask e os endpoints da API disponíveis.
+- POST /api/criar_checkin: Cria um check-in para uma rota específica.

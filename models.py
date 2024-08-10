@@ -9,6 +9,20 @@ class Empresa(db.Model):
     endereco = db.Column(db.String(200))
     telefone = db.Column(db.String(15))
     email = db.Column(db.String(100))
+    login = db.Column(db.String(50), unique=True, nullable=False)
+    senha_hash = db.Column(db.String(128), nullable=False)
+
+    # Relacionamentos
+    clientes = db.relationship('Cliente', backref='empresa', lazy=True)
+    motoristas = db.relationship('Motorista', backref='empresa', lazy=True)
+    produtos = db.relationship('Produto', backref='empresa', lazy=True)
+    rotas = db.relationship('Rota', backref='empresa', lazy=True)
+
+    def set_password(self, senha):
+        self.senha_hash = generate_password_hash(senha)
+
+    def check_password(self, senha):
+        return check_password_hash(self.senha_hash, senha)
 
 class Cliente(db.Model):
     __tablename__ = 'clientes'
