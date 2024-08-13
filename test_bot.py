@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker
-from models import Checkin, Rota, Cliente, Empresa
+from models import Checkin, Rota, Motorista, Produto, Cliente, Empresa
 
 # Configurações do WebDriver
 chrome_options = Options()
@@ -44,10 +44,15 @@ def send_message(contact_number, message):
         search_box.send_keys(formatted_number)
         search_box.send_keys(Keys.ENTER)
         
-        time.sleep(2)  # Esperar um momento para o WhatsApp Web carregar o contato
+        # Esperar um tempo adicional para garantir que o contato foi carregado
+        time.sleep(5)
+        
+        # Garantir que o campo de mensagem esteja presente e interativo
+        message_box = wait.until(
+            EC.element_to_be_clickable((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
+        )
 
         # Enviar a mensagem
-        message_box = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="1"]')))
         message_box.send_keys(message)
         message_box.send_keys(Keys.ENTER)
 
@@ -67,15 +72,24 @@ def monitor_checkins():
                     last_checkin_ids.add(checkin.id)
 
                     rota = session.query(Rota).get(checkin.rota_id)
+                    motorista = session.query(Motorista).get(checkin.motorista_id)
                     cliente = session.query(Cliente).get(checkin.produto.cliente_id)
                     empresa = session.query(Empresa).get(rota.empresa_id)
 
+                    # Formatar tempo restante de entrega
+                    if checkin.tempo_restante_entrega:
+                        tempo_restante = str(checkin.tempo_restante_entrega)
+                    else:
+                        tempo_restante = "Não disponível"
+
                     message = (
                         f"Check-in atualizado:\n"
+                        f"Motorista: {motorista.nome}\n"
                         f"Produto: {checkin.produto.descricao}\n"
                         f"Local: {checkin.local}\n"
                         f"Horário: {checkin.horario.strftime('%H:%M')}\n"
-                        f"Data: {checkin.horario.strftime('%Y-%m-%d')}"
+                        f"Data: {checkin.horario.strftime('%Y-%m-%d')}\n"
+                        f"Tempo Restante de Entrega: {tempo_restante}"
                     )
 
                     send_message(cliente.telefone, message)

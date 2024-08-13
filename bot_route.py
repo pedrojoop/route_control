@@ -25,7 +25,7 @@ driver.get("https://web.whatsapp.com")
 print("Escaneie o QR code do WhatsApp Web e pressione Enter")
 input("Pressione Enter após escanear o QR code...")
 
-# Esperar a presença do elemento de busca (máximo 30 segundos, possibilidade de aumento futuro para sem limite de tempo)
+# Esperar a presença do elemento de busca (máximo 30 segundos)
 wait = WebDriverWait(driver, 30)
 
 # Configuração do banco de dados
@@ -35,7 +35,6 @@ session = Session()
 
 # Função para enviar mensagem via WhatsApp usando Click to Chat
 def send_message(contact_number, message):
-    # Codificar a mensagem para ser usada na URL
     message_encoded = urllib.parse.quote(message)
     url = f"https://wa.me/{contact_number}?text={message_encoded}"
     
@@ -62,13 +61,22 @@ def monitor_checkins():
                     rota = session.query(Rota).get(checkin.rota_id)
                     cliente = session.query(Cliente).get(checkin.produto.cliente_id)
                     empresa = session.query(Empresa).get(rota.empresa_id)
+                    motorista = session.query(Motorista).get(checkin.motorista_id)
+
+                    # Formatar tempo restante de entrega
+                    if checkin.tempo_restante_entrega:
+                        tempo_restante = str(checkin.tempo_restante_entrega)
+                    else:
+                        tempo_restante = "Não disponível"
 
                     message = (
                         f"Check-in atualizado:\n"
+                        f"Motorista: {motorista.nome}\n"
                         f"Produto: {checkin.produto.descricao}\n"
                         f"Local: {checkin.local}\n"
                         f"Horário: {checkin.horario.strftime('%H:%M')}\n"
-                        f"Data: {checkin.horario.strftime('%Y-%m-%d')}"
+                        f"Data: {checkin.horario.strftime('%Y-%m-%d')}\n"
+                        f"Tempo Restante de Entrega: {tempo_restante}"
                     )
 
                     # Enviar mensagem para o cliente
@@ -77,7 +85,7 @@ def monitor_checkins():
                     # Enviar mensagem para a empresa
                     send_message(empresa.telefone, message)
 
-            time.sleep(10)  # Verifique atualizações a cada 10 segundos
+            time.sleep(10)
         except Exception as e:
             print(f"Erro: {e}")
             time.sleep(10)

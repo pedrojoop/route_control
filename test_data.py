@@ -14,7 +14,7 @@ def create_test_data():
     empresa1 = Empresa(
         nome="Empresa Teste 1",
         endereco="Endereço Teste 1",
-        telefone="558586807835",  # +55 85 8680-7835
+        telefone="558586807835", 
         email="empresa1@teste.com",
         login="empresa_teste1"
     )
@@ -26,7 +26,7 @@ def create_test_data():
     empresa2 = Empresa(
         nome="Empresa Teste 2",
         endereco="Endereço Teste 2",
-        telefone="558596877482",  # +55 85 9687-7482
+        telefone="558596877482", 
         email="empresa2@teste.com",
         login="empresa_teste2"
     )
@@ -38,14 +38,14 @@ def create_test_data():
     cliente1 = Cliente(
         nome="Cliente Teste 1",
         endereco="Endereço Cliente 1",
-        telefone="558586807835",  # +55 85 8680-7835
+        telefone="558586807835",
         email="cliente1@teste.com",
         empresa_id=empresa1.id
     )
     cliente2 = Cliente(
         nome="Cliente Teste 2",
         endereco="Endereço Cliente 2",
-        telefone="558596877482",  # +55 85 9687-7482
+        telefone="558596877482",
         email="cliente2@teste.com",
         empresa_id=empresa2.id
     )
@@ -57,7 +57,7 @@ def create_test_data():
         nome="Motorista Teste 1",
         placa="ABC-1234",
         cpf_cnpj="12345678900",
-        telefone="558586807835",  # +55 85 8680-7835
+        telefone="558586807835",
         email="motorista1@teste.com",
         empresa_id=empresa1.id
     )
@@ -65,7 +65,7 @@ def create_test_data():
         nome="Motorista Teste 2",
         placa="XYZ-5678",
         cpf_cnpj="98765432100",
-        telefone="558596877482",  # +55 85 9687-7482
+        telefone="558596877482",  
         email="motorista2@teste.com",
         empresa_id=empresa2.id
     )

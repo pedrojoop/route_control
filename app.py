@@ -52,9 +52,9 @@ def calcular_tempo_distancia(local_saida, local_entrega):
     if 'routes' not in data or len(data['routes']) == 0:
         raise ValueError(f"Erro ao obter rotas: {data}")
 
-    tempo_estimado = data['routes'][0]['duration']  # Em segundos
-    distancia = data['routes'][0]['distance']  # Em metros
-    return timedelta(seconds=tempo_estimado), distancia / 1000  # Converta a distância para quilômetros
+    tempo_estimado = data['routes'][0]['duration'] 
+    distancia = data['routes'][0]['distance']
+    return timedelta(seconds=tempo_estimado), distancia / 1000 
 
 def calcular_tempo_restante(local_atual, local_entrega):
     coords_atual = geocode_local(local_atual)
