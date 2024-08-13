@@ -8,7 +8,7 @@ engine = create_engine('postgresql://postgres:2303@localhost/banco_teste')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Função para criar dados falsos
+# Função para criar dados fictícios
 def create_test_data():
     # Criar a primeira empresa
     empresa1 = Empresa(
@@ -113,6 +113,7 @@ def create_test_data():
         produto_id=produto1.id,
         local="Local 1",
         horario=datetime.now(),
+        tempo_restante_entrega=timedelta(hours=5, minutes=30)  # Exemplo de tempo restante
     )
     checkin2 = Checkin(
         motorista_id=motorista2.id,
@@ -120,6 +121,7 @@ def create_test_data():
         produto_id=produto2.id,
         local="Local 2",
         horario=datetime.now() + timedelta(hours=1),
+        tempo_restante_entrega=timedelta(hours=3, minutes=45)  # Exemplo de tempo restante
     )
     session.add_all([checkin1, checkin2])
     session.commit()
