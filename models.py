@@ -19,6 +19,9 @@ class Empresa(db.Model):
     produtos = db.relationship('Produto', backref='empresa', lazy=True)
     rotas = db.relationship('Rota', backref='empresa', lazy=True)
 
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+
     def set_password(self, senha):
         self.senha_hash = generate_password_hash(senha)
 
@@ -34,6 +37,9 @@ class Cliente(db.Model):
     email = db.Column(db.String(100))
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'))
 
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+
 class Motorista(db.Model):
     __tablename__ = 'motoristas'
     id = db.Column(db.Integer, primary_key=True)
@@ -44,12 +50,18 @@ class Motorista(db.Model):
     email = db.Column(db.String(100))
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'))
 
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+
 class Produto(db.Model):
     __tablename__ = 'produtos'
     id = db.Column(db.Integer, primary_key=True)
     descricao = db.Column(db.String(200))
     cliente_id = db.Column(db.Integer, db.ForeignKey('clientes.id'))
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'))
+
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
 
 class Rota(db.Model):
     __tablename__ = 'rotas'
@@ -62,6 +74,9 @@ class Rota(db.Model):
     tempo_entrega_estimado = db.Column(db.Interval)
     distancia_estimada = db.Column(db.Float)
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'))
+
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
 
 class Checkin(db.Model):
     __tablename__ = 'checkins'
