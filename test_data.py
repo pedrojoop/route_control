@@ -72,14 +72,16 @@ def create_test_data():
     session.add_all([motorista1, motorista2])
     session.commit()
 
-    # Criar produtos
+    # Criar produtos com nome e descrição
     produto1 = Produto(
-        descricao="Produto Teste 1",
+        nome="Produto 1",
+        descricao="Descrição do Produto 1",
         cliente_id=cliente1.id,
         empresa_id=empresa1.id
     )
     produto2 = Produto(
-        descricao="Produto Teste 2",
+        nome="Produto 2",
+        descricao="Descrição do Produto 2",
         cliente_id=cliente2.id,
         empresa_id=empresa2.id
     )
