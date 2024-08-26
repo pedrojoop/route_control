@@ -40,6 +40,7 @@ def create_test_data():
         endereco="Endereço Cliente 1",
         telefone="558586807835",
         email="cliente1@teste.com",
+        nif = "12343256476",
         empresa_id=empresa1.id
     )
     cliente2 = Cliente(
@@ -47,6 +48,7 @@ def create_test_data():
         endereco="Endereço Cliente 2",
         telefone="558596877482",
         email="cliente2@teste.com",
+        nif = "123432564761231",
         empresa_id=empresa2.id
     )
     session.add_all([cliente1, cliente2])

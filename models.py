@@ -35,6 +35,7 @@ class Cliente(db.Model):
     endereco = db.Column(db.String(200))
     telefone = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100))
+    nif = db.Column(db.String(100))
     empresa_id = db.Column(db.Integer, db.ForeignKey('empresas.id'))
 
     def as_dict(self):
