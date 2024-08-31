@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react"
+import { useNavigate } from 'react-router-dom'
 
 export function LoginPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     username: '',
@@ -10,17 +10,16 @@ export function LoginPage() {
   })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    navigate('/home');
+    e.preventDefault()
+    navigate('/home')
   }
 
   return (

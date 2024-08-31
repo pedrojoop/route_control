@@ -3,21 +3,18 @@ import { Header } from '../components/Header'
 import { SideBar } from '../components/Sidebar'
 import { ProductsPage } from './ProductsPage'
 import { ClientsPage } from './ClientsPage'
-import { NotesPage } from './Notes'
-import { RoutesPage } from './Routes'
+import { RoutesPage } from './RoutesPage'
 import { DriversPage } from './DriversPage'
 
 export function HomePage() {
-  const [activeContent, setActiveContent] = useState('products')
+  const [activeContent, setActiveContent] = useState('clients')
 
   const renderContent = () => {
     switch (activeContent) {
-      case 'products':
-        return <ProductsPage />
       case 'clients':
         return <ClientsPage />
-      case 'notes':
-        return <NotesPage />
+      case 'products':
+        return <ProductsPage />
       case 'routes':
         return <RoutesPage />
       case 'drivers':
@@ -31,10 +28,12 @@ export function HomePage() {
     <>
       <div className='flex h-screen flex-col'>
         <Header />
-        <SideBar setActiveContent={setActiveContent}/>
-        <main className='overflow-x-hidden flex-1 sm:mt-[var(--header-height)] sm:ml-[var(--aside-width)]'>
-          {renderContent()}
-        </main>
+        <div className='flex'>
+          <SideBar activeContent={activeContent} setActiveContent={setActiveContent}/>
+          <main className='overflow-x-hidden w-screen'>
+            {renderContent()}
+          </main>
+        </div>
       </div>
     </>
   )
