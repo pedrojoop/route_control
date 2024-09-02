@@ -3,15 +3,21 @@ import { getRoutes } from "../services/routes"
 
 export function RoutesPage() {
    /**
-   * @type {import('../services/routes'.Client[])}
+   * @type {import('../services/routes'.Route[])}
    */
-   const [routes, setRoutes] = useState()
+   const [routes, setRoutes] = useState([])
    const [loading, setLoading] = useState(true)
+   const [filteredRoutes, setFilteredRoutes] = useState([])
+   const [filters, setFilters] = useState({
+     id: '',
+     empresa_id: ''
+   })
 
    useEffect(() => {
      getRoutes()
        .then(response => {
           setRoutes(response.data)
+          setFilteredRoutes(response.data)
           setLoading(false)
        })
        .catch(error => {
@@ -20,6 +26,34 @@ export function RoutesPage() {
           setLoading(false)
        })
    }, [])
+
+   const handleFilterChange = (e) => {
+    const { name, value } = e.target
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [name]: value
+    }))
+  }
+
+  useEffect(() => {
+    const filtered = routes.filter(route => {
+      const routeStartDate = new Date(route.data_inicio)
+      const routeEndDate = new Date(route.data_fim)
+      const filterStartDate = new Date(filters.data_inicio)
+      const filterEndDate = new Date(filters.data_fim)
+
+      const isInDateRange = (!filters.data_inicio || (routeStartDate >= filterStartDate)) &&
+                            (!filters.data_fim || (routeEndDate <= filterEndDate))
+    
+      return (
+        (filters.id === '' || route.id.toString().includes(filters.id)) &&
+        (filters.empresa_id === '' || route.empresa_id.toString().includes(filters.empresa_id)) &&
+        isInDateRange
+      )
+    })
+
+    setFilteredRoutes(filtered)
+  }, [filters, routes])
 
   const formattedDate = (date) => {
     const dateObj = new Date(date)
@@ -41,8 +75,8 @@ export function RoutesPage() {
 
   const getRouteStatus = (dataInicio, dataFim) => {
     if (dataInicio && dataFim) return 'completed'
-    if (dataInicio && !dataFim) return 'in_profess'
-    if (!dataInicio && !dataFim) return 'not_completed'
+    if (dataInicio && !dataFim) return 'in_process'
+    if (!dataInicio) return 'not_started'
   }
 
   const routeIcon = (status) => {
@@ -68,41 +102,58 @@ export function RoutesPage() {
 
   return (
     <div className="w-full overflow-x-auto">
+      <div className="mb-4">
+        <input
+          type="text"
+          name="id"
+          placeholder="Filtrar por ID"
+          value={filters.id}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="empresa_id"
+          placeholder="Filtrar por ID da Empresa"
+          value={filters.empresa_id}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="date"
+          name="data_inicio"
+          placeholder="Data de início"
+          value={filters.data_inicio}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="date"
+          name="data_fim"
+          placeholder="Data de fim"
+          value={filters.data_fim}
+          onChange={handleFilterChange}
+          className="border rounded p-2 text-slate-600"
+        />
+      </div>
+  
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" className="px-6 py-3">
-              Resumo de rota
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Id
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Local de entrega
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Local de saída
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Data de início
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Data de conclusão
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Distância estimada
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Tempo de entrega estimado
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Id da empresa
-            </th>
+            <th scope="col" className="px-6 py-3">Resumo de rota</th>
+            <th scope="col" className="px-6 py-3">Id</th>
+            <th scope="col" className="px-6 py-3">Local de entrega</th>
+            <th scope="col" className="px-6 py-3">Local de saída</th>
+            <th scope="col" className="px-6 py-3">Data de início</th>
+            <th scope="col" className="px-6 py-3">Data de conclusão</th>
+            <th scope="col" className="px-6 py-3">Distância estimada</th>
+            <th scope="col" className="px-6 py-3">Tempo de entrega estimado</th>
+            <th scope="col" className="px-6 py-3">Id da empresa</th>
           </tr>
         </thead>
         <tbody>
           {
-            routes?.map((route) => (
+            filteredRoutes?.map((route) => (
                 <tr key={route.id} className="bg-white border-b border-thead dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" className="flex px-6 py-4 font-medium whitespace-nowrap">
                     <div className="flex items-center mr-4">
@@ -115,30 +166,14 @@ export function RoutesPage() {
                       <div>{route.id}</div>
                     </div>
                   </th>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.id)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.local_entrega)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.local_saida)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(formattedDate(route.data_inicio))}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(formattedDate(route.data_fim))}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.distancia_estimada)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.tempo_entrega_estimado)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {getDisplayValue(route.empresa_id)}
-                  </td>
+                  <td className="px-6 py-4">{getDisplayValue(route.id)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.local_entrega)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.local_saida)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(formattedDate(route.data_inicio))}</td>
+                  <td className="px-6 py-4">{getDisplayValue(formattedDate(route.data_fim))}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.distancia_estimada)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.tempo_entrega_estimado)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.empresa_id)}</td>
                 </tr>
               )
             )

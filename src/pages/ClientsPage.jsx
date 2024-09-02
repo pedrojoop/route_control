@@ -3,15 +3,25 @@ import { getClients } from "../services/routes"
 
 export function ClientsPage() {
    /**
-   * @type {import('../services/routes'.Client[])}
+   * @type {import('../services/routes').Client[]}
    */
-   const [clients, setClients] = useState()
+   const [clients, setClients] = useState([])
+   const [filteredClients, setFilteredClients] = useState([])
    const [loading, setLoading] = useState(true)
+   const [filters, setFilters] = useState({
+     id: '',
+     nome: '',
+     endereco: '',
+     telefone: '',
+     email: '',
+     empresa_id: ''
+   })
 
    useEffect(() => {
      getClients()
        .then(response => {
           setClients(response.data)
+          setFilteredClients(response.data)
           setLoading(false)
        })
        .catch(error => {
@@ -21,59 +31,106 @@ export function ClientsPage() {
        })
    }, [])
 
+   const handleFilterChange = (e) => {
+     const { name, value } = e.target
+     setFilters(prevFilters => ({
+       ...prevFilters,
+       [name]: value
+     }))
+   }
+
+   useEffect(() => {
+     const filtered = clients.filter(client =>
+       (filters.id === '' || client.id.toString().includes(filters.id)) &&
+       (filters.nome === '' || client.nome.toLowerCase().includes(filters.nome.toLowerCase())) &&
+       (filters.endereco === '' || client.endereco.toLowerCase().includes(filters.endereco.toLowerCase())) &&
+       (filters.telefone === '' || client.telefone.includes(filters.telefone)) &&
+       (filters.email === '' || client.email.toLowerCase().includes(filters.email.toLowerCase())) &&
+       (filters.empresa_id === '' || client.empresa_id.toString().includes(filters.empresa_id))
+     )
+     setFilteredClients(filtered)
+   }, [filters, clients])
+
   return (
     <div className="w-full overflow-x-auto">
-      <table className=" w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <div className="mb-4">
+        <input
+          type="text"
+          name="id"
+          placeholder="Filtrar por ID"
+          value={filters.id}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="nome"
+          placeholder="Filtrar por Nome"
+          value={filters.nome}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="endereco"
+          placeholder="Filtrar por Endereço"
+          value={filters.endereco}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="telefone"
+          placeholder="Filtrar por Telefone"
+          value={filters.telefone}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="Filtrar por Email"
+          value={filters.email}
+          onChange={handleFilterChange}
+          className="border rounded p-2 mr-2 text-slate-600"
+        />
+        <input
+          type="text"
+          name="empresa_id"
+          placeholder="Filtrar por ID da Empresa"
+          value={filters.empresa_id}
+          onChange={handleFilterChange}
+          className="border rounded p-2 text-slate-600"
+        />
+      </div>
+
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" className="px-6 py-3">
-              Id
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Nome
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Endereço
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Telefone
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Email
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Id da empresa
-            </th>
+            <th scope="col" className="px-6 py-3">Id</th>
+            <th scope="col" className="px-6 py-3">Nome</th>
+            <th scope="col" className="px-6 py-3">Endereço</th>
+            <th scope="col" className="px-6 py-3">Telefone</th>
+            <th scope="col" className="px-6 py-3">Email</th>
+            <th scope="col" className="px-6 py-3">Id da empresa</th>
           </tr>
         </thead>
-        <tbody className="">
+        <tbody>
           {
-            clients?.map((client) => (
+            filteredClients.map(client => (
               <tr key={client.id} className="bg-aside border-b border-thead dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
-                {client.id}
-              </th>
-              <td className="px-6 py-4">
-                {client.nome}
-              </td>
-              <td className="px-6 py-4">
-                {client.endereco}
-              </td>
-              <td className="px-6 py-4">
-                {client.telefone}
-              </td>
-              <td className="px-6 py-4">
-                {client.email}
-              </td>
-              <td className="px-6 py-4">
-                {client.empresa_id}
-              </td>
-            </tr>
-              )
-            )
+                <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap">{client.id}</th>
+                <td className="px-6 py-4">{client.nome}</td>
+                <td className="px-6 py-4">{client.endereco}</td>
+                <td className="px-6 py-4">{client.telefone}</td>
+                <td className="px-6 py-4">{client.email}</td>
+                <td className="px-6 py-4">{client.empresa_id}</td>
+              </tr>
+            ))
           }
         </tbody>
       </table>
+      
       {
         loading ? 
         <div className="m-auto flex justify-center text-center">
@@ -83,7 +140,7 @@ export function ClientsPage() {
           </svg>
           <span className="sr-only">Loading...</span>
         </div>
-        : <></>
+        : null
       }
     </div>
   )
