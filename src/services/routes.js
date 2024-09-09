@@ -7,7 +7,7 @@ const apiLink = 'http://127.0.0.1:5000/'
  * @returns {Promise<Client[]>}
  */
 export async function getClients() {
-  return await axios.get(apiLink+'/api/clientes')
+  return await axios.get(apiLink+'api/clientes')
 }
 
 /**
@@ -23,7 +23,7 @@ export async function getDrivers() {
  * @returns {Promise<Product[]>}
  */
 export async function getProducts() {
-  return await axios.get('http://127.0.0.1:5000/api/produtos')
+  return await axios.get(apiLink+'api/produtos')
 }
 
 /**
@@ -31,7 +31,7 @@ export async function getProducts() {
  * @returns {Promise<Route[]>}
  */
 export async function getRoutes() {
-  return await axios.get('http://127.0.0.1:5000/api/rotas')
+  return await axios.get(apiLink+'api/rotas')
 }
 
 /**
@@ -39,7 +39,28 @@ export async function getRoutes() {
  * @returns {Promise<Company[]>}
  */
 export async function getCompanies() {
-  return await axios.get('http://127.0.0.1:5000/api/empresa')
+  return await axios.get(apiLink+'api/empresa')
+}
+
+/**
+ * 
+ * @returns {Promise<Object>}
+ * 
+ * @throws {Error} Caso o login falhe retorna um erro.
+ * 
+ * @example
+ * // Em caso de sucesso:
+ * // { message: "Login realizado com sucesso" }
+ * 
+ * @example
+ * // Em caso de erro:
+ * // { error: "Login ou senha incorretos" }
+ */
+export async function loginRequest(login, password) {
+  return await axios.post(apiLink+'auth/login', {
+    login,
+    senha: password
+  })
 }
 
 /**

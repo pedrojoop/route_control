@@ -102,53 +102,62 @@ export function RoutesPage() {
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="mb-4">
-        <input
-          type="text"
-          name="id"
-          placeholder="Filtrar por ID"
-          value={filters.id}
-          onChange={handleFilterChange}
-          className="border rounded p-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="empresa_id"
-          placeholder="Filtrar por ID da Empresa"
-          value={filters.empresa_id}
-          onChange={handleFilterChange}
-          className="border rounded p-2 mr-2 text-slate-600"
-        />
-        <input
-          type="date"
-          name="data_inicio"
-          placeholder="Data de início"
-          value={filters.data_inicio}
-          onChange={handleFilterChange}
-          className="border rounded p-2 mr-2 text-slate-600"
-        />
-        <input
-          type="date"
-          name="data_fim"
-          placeholder="Data de fim"
-          value={filters.data_fim}
-          onChange={handleFilterChange}
-          className="border rounded p-2 text-slate-600"
-        />
-      </div>
-  
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="id"
+                placeholder="Filtrar por ID"
+                value={filters.id}
+                onChange={handleFilterChange}
+                className="border rounded p-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="empresa_id"
+                placeholder="Filtrar por ID da Empresa"
+                value={filters.empresa_id}
+                onChange={handleFilterChange}
+                className="border rounded p-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="date"
+                name="data_inicio"
+                placeholder="Data de início"
+                value={filters.data_inicio}
+                onChange={handleFilterChange}
+                className="border rounded p-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="date"
+                name="data_fim"
+                placeholder="Data de fim"
+                value={filters.data_fim}
+                onChange={handleFilterChange}
+                className="border rounded p-2 text-slate-600"
+              />
+            </th>
+          </tr>
+        </thead>
         <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">Resumo de rota</th>
             <th scope="col" className="px-6 py-3">Id</th>
-            <th scope="col" className="px-6 py-3">Local de entrega</th>
-            <th scope="col" className="px-6 py-3">Local de saída</th>
+            <th scope="col" className="px-6 py-3">Id da empresa</th>
             <th scope="col" className="px-6 py-3">Data de início</th>
             <th scope="col" className="px-6 py-3">Data de conclusão</th>
+            <th scope="col" className="px-6 py-3">Local de entrega</th>
+            <th scope="col" className="px-6 py-3">Local de saída</th>
             <th scope="col" className="px-6 py-3">Distância estimada</th>
             <th scope="col" className="px-6 py-3">Tempo de entrega estimado</th>
-            <th scope="col" className="px-6 py-3">Id da empresa</th>
           </tr>
         </thead>
         <tbody>
@@ -167,13 +176,13 @@ export function RoutesPage() {
                     </div>
                   </th>
                   <td className="px-6 py-4">{getDisplayValue(route.id)}</td>
-                  <td className="px-6 py-4">{getDisplayValue(route.local_entrega)}</td>
-                  <td className="px-6 py-4">{getDisplayValue(route.local_saida)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.empresa_id)}</td>
                   <td className="px-6 py-4">{getDisplayValue(formattedDate(route.data_inicio))}</td>
                   <td className="px-6 py-4">{getDisplayValue(formattedDate(route.data_fim))}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.local_entrega)}</td>
+                  <td className="px-6 py-4">{getDisplayValue(route.local_saida)}</td>
                   <td className="px-6 py-4">{getDisplayValue(route.distancia_estimada)}</td>
                   <td className="px-6 py-4">{getDisplayValue(route.tempo_entrega_estimado)}</td>
-                  <td className="px-6 py-4">{getDisplayValue(route.empresa_id)}</td>
                 </tr>
               )
             )

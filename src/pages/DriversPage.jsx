@@ -68,57 +68,74 @@ export function DriversPage() {
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="p-4">
-        <input
-          type="text"
-          name="id"
-          placeholder="Filtrar por ID"
-          value={filters.id}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="nome"
-          placeholder="Filtrar por Nome"
-          value={filters.nome}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="placa"
-          placeholder="Filtrar por Placa"
-          value={filters.placa}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="cpf_cnpj"
-          placeholder="Filtrar por CNPJ/CPF"
-          value={filters.cpf_cnpj}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="telefone"
-          placeholder="Filtrar por Telefone"
-          value={filters.telefone}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
-        />
-        <input
-          type="text"
-          name="empresa_id"
-          placeholder="Filtrar por ID da Empresa"
-          value={filters.empresa_id}
-          onChange={handleFilterChange}
-          className="p-2 border border-gray-300 rounded mb-2 text-slate-600"
-        />
-      </div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="id"
+                placeholder="Filtrar por ID"
+                value={filters.id}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="nome"
+                placeholder="Filtrar por Nome"
+                value={filters.nome}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="placa"
+                placeholder="Filtrar por Placa"
+                value={filters.placa}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="cpf_cnpj"
+                placeholder="Filtrar por CNPJ/CPF"
+                value={filters.cpf_cnpj}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="telefone"
+                placeholder="Filtrar por Telefone"
+                value={filters.telefone}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 mr-2 text-slate-600"
+              />
+            </th>
+            <th scope="col" className="px-6 py-3">
+
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <input
+                type="text"
+                name="empresa_id"
+                placeholder="Filtrar por ID da Empresa"
+                value={filters.empresa_id}
+                onChange={handleFilterChange}
+                className="p-2 border border-gray-300 rounded mb-2 text-slate-600"
+              />
+            </th>
+          </tr>
+        </thead>
         <thead className="text-xs text-gray-700 uppercase bg-thead dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">Id</th>
